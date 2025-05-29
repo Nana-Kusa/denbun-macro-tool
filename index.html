@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>伝文マクロ生成フォーム</title>
+  <title>Denbun Macro Generate Form / 伝文マクロ生成フォーム</title>
   <style>
     body {
       font-family: sans-serif;
@@ -33,30 +33,39 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+    .lang-toggle {
+      margin-bottom: 1.5em;
+    }
   </style>
 </head>
 <body>
-  <h1>伝文マクロ生成フォーム</h1>
+  <h1>Denbun Macro Generate Form / 伝文マクロ生成フォーム</h1>
+
+  <div class="lang-toggle">
+    <label><input type="radio" name="lang" value="en" checked> English</label>
+    <label><input type="radio" name="lang" value="ja"> 日本語</label>
+  </div>
+
   <form id="denbunForm">
-    <label>ラベル:
+    <label>Label / ラベル:
       <input type="text" name="label" required>
     </label>
-    <label>目的:
+    <label>Purpose / 目的:
       <input type="text" name="goal" required>
     </label>
-    <label>前提知識:
+    <label>Prior Knowledge / 前提知識:
       <input type="text" name="context" required>
     </label>
-    <label>制約条件:
+    <label>Constraints / 制約条件:
       <input type="text" name="constraints" required>
     </label>
-    <label>聞きたいこと:
+    <label>Question / 質問:
       <input type="text" name="question" required>
     </label>
-    <button type="submit">伝文マクロを生成</button>
+    <button type="submit">Generate Denbun Macro / 伝文マクロを生成</button>
   </form>
 
-  <h2>生成された伝文マクロ</h2>
+  <h2>Generated Denbun Macro / 生成された伝文マクロ</h2>
   <pre id="output"></pre>
 
   <script>
@@ -68,12 +77,18 @@
       const context = formData.get('context');
       const constraints = formData.get('constraints');
       const question = formData.get('question');
+      const lang = document.querySelector('input[name="lang"]:checked').value;
 
-      const result = `#伝文_${label}:
-目的={${goal}};
-前提知識={${context}};
-制約条件={${constraints}};
-聞きたいこと={${question}};`;
+      const prefix = lang === 'ja' ? '#伝文_' : '#Denbun_';
+      const keys = lang === 'ja'
+        ? { goal: '目的', context: '前提知識', constraints: '制約条件', question: '聞きたいこと' }
+        : { goal: 'Purpose', context: 'Prior_Knowledge', constraints: 'Constraints', question: 'Question' };
+
+      const result = `${prefix}${label}:
+${keys.goal}={${goal}};
+${keys.context}={${context}};
+${keys.constraints}={${constraints}};
+${keys.question}={${question}};`;
 
       document.getElementById('output').textContent = result;
     };
