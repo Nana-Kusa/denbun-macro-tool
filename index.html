@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>伝文マクロ生成フォーム</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      max-width: 700px;
+      margin: auto;
+      background: #f9f9f9;
+    }
+    label {
+      display: block;
+      margin-bottom: 1em;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5em;
+      margin-top: 0.25em;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      margin-top: 1em;
+    }
+    pre {
+      background: #eee;
+      padding: 1em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>伝文マクロ生成フォーム</h1>
+  <form id="denbunForm">
+    <label>ラベル:
+      <input type="text" name="label" required>
+    </label>
+    <label>目的:
+      <input type="text" name="goal" required>
+    </label>
+    <label>前提知識:
+      <input type="text" name="context" required>
+    </label>
+    <label>制約条件:
+      <input type="text" name="constraints" required>
+    </label>
+    <label>聞きたいこと:
+      <input type="text" name="question" required>
+    </label>
+    <button type="submit">伝文マクロを生成</button>
+  </form>
+
+  <h2>生成された伝文マクロ</h2>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('denbunForm').onsubmit = function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const label = formData.get('label');
+      const goal = formData.get('goal');
+      const context = formData.get('context');
+      const constraints = formData.get('constraints');
+      const question = formData.get('question');
+
+      const result = `#伝文_${label}:
+目的={${goal}};
+前提知識={${context}};
+制約条件={${constraints}};
+聞きたいこと={${question}};`;
+
+      document.getElementById('output').textContent = result;
+    };
+  </script>
+</body>
+</html>
